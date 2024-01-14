@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/labstack/echo/v4"
+	"log"
 )
 
 type server struct {
@@ -17,5 +18,9 @@ func New(port string) *server {
 }
 
 func (s *server) Start() error {
+	if s.port == "" {
+		log.Fatal("PORT is required")
+	}
+
 	return s.echo.Start(s.port)
 }
