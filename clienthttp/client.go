@@ -16,15 +16,13 @@ type ClientHTTP interface {
 }
 
 type clientHttp struct {
-	domain        string
-	headerDefault http.Header
-	client        *http.Client
+	domain string
+	client *http.Client
 }
 
 func NewClientHTTP(domain string, timeout int64) *clientHttp {
 	return &clientHttp{
-		domain:        domain,
-		headerDefault: make(http.Header),
+		domain: domain,
 		client: &http.Client{
 			Transport: &http.Transport{
 				DialContext: (&net.Dialer{
@@ -37,7 +35,7 @@ func NewClientHTTP(domain string, timeout int64) *clientHttp {
 				MaxIdleConns:        100,
 				DisableKeepAlives:   true,
 			},
-			Timeout: time.Duration(timeout) * time.Second,
+			Timeout: time.Duration(timeout) * time.Millisecond,
 		},
 	}
 }
@@ -82,15 +80,9 @@ func (c *clientHttp) do(ctx context.Context, req *http.Request, timeout int64) (
 		return
 	}
 
-	for k := range c.headerDefault {
-		req.Header.Add(k, c.headerDefault.Get(k))
-	}
-
 	req = req.WithContext(ctx)
-
+	
 	resp, err := c.client.Do(req)
-	defer resp.Body.Close()
-
 	if err != nil {
 		return
 	}
