@@ -90,7 +90,7 @@ func TestClientHttp_DoWithTimeout(t *testing.T) {
 		client := clienthttp.NewClientHTTP(ts.URL, 1000)
 
 		var out struct {
-			status string `json:"status"`
+			Status string `json:"status"`
 		}
 
 		err := client.DoWithTimeout(context.TODO(), req, 100, http.StatusOK, &out)
@@ -123,7 +123,7 @@ func TestClientHttp_DoWithTimeout(t *testing.T) {
 		client := clienthttp.NewClientHTTP(ts.URL, 1000)
 
 		var out struct {
-			status string `json:"status"`
+			Status string `json:"status"`
 		}
 
 		err := client.DoWithTimeout(context.TODO(), req, 100, http.StatusOK, &out)
@@ -157,7 +157,7 @@ func TestClientHttp_DoWithTimeout(t *testing.T) {
 		client := clienthttp.NewClientHTTP(ts.URL, 1000)
 
 		var out struct {
-			status string `json:"status"`
+			Status string `json:"status"`
 		}
 
 		err := client.DoWithTimeout(context.TODO(), req, 100, http.StatusOK, &out)
@@ -191,7 +191,7 @@ func TestClientHttp_DoWithTimeout(t *testing.T) {
 		client := clienthttp.NewClientHTTP(ts.URL, 1000)
 
 		var out struct {
-			status string `json:"status"`
+			Status string `json:"status"`
 		}
 
 		err := client.DoWithTimeout(context.TODO(), req, 100, http.StatusCreated, &out)

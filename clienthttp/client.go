@@ -11,7 +11,7 @@ import (
 )
 
 type ClientHTTP interface {
-	Do(ctx context.Context, req *http.Request, timeout int64) (response []byte, statusCode int, err error)
+	Do(ctx context.Context, req *http.Request) (response []byte, statusCode int, err error)
 	DoWithTimeout(ctx context.Context, req *http.Request, timeout int64, expectedCode int, out interface{}) error
 }
 
@@ -20,7 +20,7 @@ type clientHttp struct {
 	client *http.Client
 }
 
-func NewClientHTTP(domain string, timeout int64) *clientHttp {
+func NewClientHTTP(domain string, timeout int64) ClientHTTP {
 	return &clientHttp{
 		domain: domain,
 		client: &http.Client{
@@ -81,7 +81,7 @@ func (c *clientHttp) do(ctx context.Context, req *http.Request, timeout int64) (
 	}
 
 	req = req.WithContext(ctx)
-	
+
 	resp, err := c.client.Do(req)
 	if err != nil {
 		return
