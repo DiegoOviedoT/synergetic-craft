@@ -3,9 +3,10 @@ package producer
 import (
 	"errors"
 	"fmt"
+	"time"
+
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/labstack/gommon/log"
-	"time"
 )
 
 type Producer interface {
@@ -14,14 +15,14 @@ type Producer interface {
 	Send(topic string, key, message []byte) <-chan error
 }
 
-type ParamConn struct {
+type BrokerConn struct {
 	broker         string
 	timeoutMessage time.Duration
 }
 
 type producer struct {
-	paramConn ParamConn
-	producer  *kafka.Producer
+	brokerConn BrokerConn
+	producer   *kafka.Producer
 }
 
 func NewProducer(broker string, timeoutMessage int64) (Producer, error) {
@@ -30,7 +31,7 @@ func NewProducer(broker string, timeoutMessage int64) (Producer, error) {
 	}
 
 	return &producer{
-		paramConn: ParamConn{
+		brokerConn: BrokerConn{
 			broker:         broker,
 			timeoutMessage: time.Duration(timeoutMessage) * time.Millisecond,
 		},
@@ -58,7 +59,7 @@ func (k *producer) Send(topic string, key, message []byte) <-chan error {
 		}
 
 		select {
-		case <-time.After(k.paramConn.timeoutMessage):
+		case <-time.After(k.brokerConn.timeoutMessage):
 			responseChan <- errors.New("kafka message [time exceeded]")
 			close(responseChan)
 
@@ -82,7 +83,7 @@ func (k *producer) Send(topic string, key, message []byte) <-chan error {
 
 func (k *producer) Connect() error {
 	conn, err := kafka.NewProducer(&kafka.ConfigMap{
-		"bootstrap.servers": k.paramConn.broker,
+		"bootstrap.servers": k.brokerConn.broker,
 	})
 	if err != nil {
 		return err
