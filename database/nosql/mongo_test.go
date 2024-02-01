@@ -11,7 +11,7 @@ import (
 )
 
 func TestMongoDB_InsertOne(t *testing.T) {
-	t.Run("should return ", func(t *testing.T) {
+	t.Run("should return success when mongo is connect and insert success", func(t *testing.T) {
 		f := setupMongoFixture()
 		defer f.resource.Close()
 

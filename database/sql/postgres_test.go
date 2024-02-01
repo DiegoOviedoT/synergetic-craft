@@ -21,7 +21,7 @@ func TestPostgres_Migrate(t *testing.T) {
 	conn := sql.NewPostgres(conf)
 	defer conn.Close()
 
-	err := conn.Migrate("file://migrations_test")
+	err := conn.Migrate("file://migrations")
 
 	assert.NoError(t, err)
 }
