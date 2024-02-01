@@ -55,7 +55,7 @@ func TestClientHttp_Do(t *testing.T) {
 			WithBodyBytes([]byte("body byte")).
 			Build()
 
-		client := clienthttp.NewClientHTTP(http.DefaultClient, ts.URL)
+		client := clienthttp.NewClientHTTP(&http.Client{Timeout: 100}, ts.URL)
 
 		_, _, err := client.Do(context.TODO(), req)
 
