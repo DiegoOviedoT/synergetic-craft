@@ -5,10 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"net"
 	"net/http"
 	"time"
 )
+
+type ClientAPI interface {
+	Do(req *http.Request) (*http.Response, error)
+}
 
 type ClientHTTP interface {
 	Do(ctx context.Context, req *http.Request) (response []byte, statusCode int, err error)
@@ -17,26 +20,13 @@ type ClientHTTP interface {
 
 type clientHttp struct {
 	domain string
-	client *http.Client
+	client ClientAPI
 }
 
-func NewClientHTTP(domain string, timeout int64) ClientHTTP {
+func NewClientHTTP(clientAPI ClientAPI, domain string) ClientHTTP {
 	return &clientHttp{
 		domain: domain,
-		client: &http.Client{
-			Transport: &http.Transport{
-				DialContext: (&net.Dialer{
-					Timeout:   30 * time.Second,
-					KeepAlive: 30 * time.Second,
-				}).DialContext,
-				IdleConnTimeout:     90 * time.Second,
-				TLSHandshakeTimeout: 10 * time.Second,
-				MaxConnsPerHost:     -1,
-				MaxIdleConns:        100,
-				DisableKeepAlives:   true,
-			},
-			Timeout: time.Duration(timeout) * time.Millisecond,
-		},
+		client: clientAPI,
 	}
 }
 

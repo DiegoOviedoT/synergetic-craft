@@ -29,7 +29,7 @@ func TestClientHttp_Do(t *testing.T) {
 			WithBodyBytes([]byte("body byte")).
 			Build()
 
-		client := clienthttp.NewClientHTTP(ts.URL, 2000)
+		client := clienthttp.NewClientHTTP(http.DefaultClient, ts.URL)
 
 		_, statusCode, err := client.Do(context.TODO(), req)
 
@@ -55,7 +55,7 @@ func TestClientHttp_Do(t *testing.T) {
 			WithBodyBytes([]byte("body byte")).
 			Build()
 
-		client := clienthttp.NewClientHTTP(ts.URL, 100)
+		client := clienthttp.NewClientHTTP(http.DefaultClient, ts.URL)
 
 		_, _, err := client.Do(context.TODO(), req)
 
@@ -87,7 +87,7 @@ func TestClientHttp_DoWithTimeout(t *testing.T) {
 			WithBodyBytes([]byte("body byte")).
 			Build()
 
-		client := clienthttp.NewClientHTTP(ts.URL, 1000)
+		client := clienthttp.NewClientHTTP(http.DefaultClient, ts.URL)
 
 		var out struct {
 			Status string `json:"status"`
@@ -120,7 +120,7 @@ func TestClientHttp_DoWithTimeout(t *testing.T) {
 			WithBodyBytes([]byte("body byte")).
 			Build()
 
-		client := clienthttp.NewClientHTTP(ts.URL, 1000)
+		client := clienthttp.NewClientHTTP(&http.Client{Timeout: 1000 * time.Second}, ts.URL)
 
 		var out struct {
 			Status string `json:"status"`
@@ -154,7 +154,7 @@ func TestClientHttp_DoWithTimeout(t *testing.T) {
 			WithBodyBytes([]byte("body byte")).
 			Build()
 
-		client := clienthttp.NewClientHTTP(ts.URL, 1000)
+		client := clienthttp.NewClientHTTP(http.DefaultClient, ts.URL)
 
 		var out struct {
 			Status string `json:"status"`
@@ -188,7 +188,7 @@ func TestClientHttp_DoWithTimeout(t *testing.T) {
 			WithBodyBytes([]byte("body byte")).
 			Build()
 
-		client := clienthttp.NewClientHTTP(ts.URL, 1000)
+		client := clienthttp.NewClientHTTP(http.DefaultClient, ts.URL)
 
 		var out struct {
 			Status string `json:"status"`
