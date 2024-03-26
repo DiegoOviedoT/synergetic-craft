@@ -1,4 +1,4 @@
-module synergetic-craft
+module github.com/dot-backend/synergetic-craft
 
 go 1.20
 
